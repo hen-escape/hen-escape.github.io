@@ -354,7 +354,7 @@ function update() {
     handleObstacles();
     updateScroll(); 
     
-    if (frames % 300 === 0) gameSpeed += 1.0;
+    if (frames % 240 === 0) gameSpeed += 0.5;
 }
 
 function draw() {
