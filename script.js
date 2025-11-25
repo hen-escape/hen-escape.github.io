@@ -7,7 +7,7 @@ const finalScoreElement = document.getElementById('final-score');
 const restartBtn = document.getElementById('restart-btn');
 const scrollDialog = document.getElementById('scroll-dialog'); 
 const startScreen = document.getElementById('start-screen'); 
-const scrollHint = document.getElementById('scroll-hint'); // NEW Element
+const scrollHint = document.getElementById('scroll-hint'); 
 
 // Game State
 let frames = 0;
@@ -108,15 +108,37 @@ document.addEventListener('keydown', (e) => {
         else handleInput();
     }
 });
+
+// FIXED: Touchstart logic
 document.addEventListener('touchstart', (e) => {
+    // 1. Safety Check: Are we touching a button?
+    // If target is the restart button OR the petition link...
+    if (e.target.id === 'restart-btn' || e.target.closest('.scroll-btn')) {
+        // RETURN immediately. Do not prevent default. Let the click happen.
+        return; 
+    }
+
+    // 2. Otherwise, handle game input
     if (gameStarted) {
-        e.preventDefault(); 
+        // Prevent default touch behavior (scrolling/zoom) on the CANVAS only
+        if (e.cancelable) e.preventDefault(); 
         handleInput();
     }
-});
+}, { passive: false }); // Passive false allows us to use preventDefault
+
 document.addEventListener('mousedown', () => {
     if (gameStarted) handleInput();
 });
+
+// FIXED: Touchmove logic
+document.addEventListener('touchmove', (e) => {
+    // Allow scrolling ONLY if we are interacting with the scroll dialog link
+    if (e.target.closest('.scroll-btn') || e.target.closest('.scroll-paper')) {
+        return;
+    }
+    // Otherwise lock the screen
+    e.preventDefault();
+}, { passive: false });
 
 restartBtn.addEventListener('click', (e) => {
     e.stopPropagation(); 
@@ -313,10 +335,10 @@ function gameOver() {
     
     if (hasScroll) {
         scrollDialog.classList.remove('hidden'); 
-        scrollHint.classList.add('hidden'); // Hide hint if scroll found
+        scrollHint.classList.add('hidden'); 
     } else {
         scrollDialog.classList.add('hidden'); 
-        scrollHint.classList.remove('hidden'); // Show hint if NOT found
+        scrollHint.classList.remove('hidden'); 
     }
     
     gameOverScreen.classList.remove('hidden');
@@ -335,7 +357,7 @@ function resetGame() {
     hasScroll = false;
     scrollItem = null;
     scrollDialog.classList.add('hidden');
-    scrollHint.classList.add('hidden'); // Hide hint on restart
+    scrollHint.classList.add('hidden'); 
     gameOverScreen.classList.add('hidden');
     
     gameStarted = true; 

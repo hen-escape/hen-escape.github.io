@@ -17,6 +17,10 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    
+    /* NEW: Locks the viewport on mobile */
+    overscroll-behavior: none; 
+    touch-action: none; 
 }
 
 #game-container {
@@ -116,9 +120,9 @@ canvas {
     font-weight: bold;
 }
 
-/* --- NEW: SCROLL HINT TEXT --- */
+/* --- SCROLL HINT TEXT --- */
 #scroll-hint {
-    color: var(--accent); /* Gold color */
+    color: var(--accent); 
     font-style: italic;
     margin-top: 15px;
     font-size: 15px;
