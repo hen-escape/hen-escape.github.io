@@ -32,8 +32,12 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Create Build Directory
-        run: mkdir -p public
+      # Copies 'src/' contents to 'public/' (the deploy root)
+      # This ensures 'src/index.html' becomes 'index.html' on the live site
+      - name: Copy Source to Public
+        run: |
+          mkdir -p public
+          cp -r src/* public/
 
       # 1. Minify HTML
       # This collapses whitespace, removes comments, and optimizes inline code
@@ -56,11 +60,6 @@ jobs:
       # Uses terser to compress and mangle variable names
       - name: Minify JavaScript
         run: npx terser src/script.js -o public/script.js --compress --mangle
-
-      # 4. Copy Assets
-      # Copy the GIF file directly as it does not need text minification
-      - name: Copy Image Assets
-        run: cp src/hen-escape.gif public/hen-escape.gif
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
