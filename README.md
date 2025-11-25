@@ -64,6 +64,7 @@ When deploying this project to a static site host:
 ## 📜 Credits
 
 * **Development:** Generated with Gemini AI
+* **Developer:** [@po-man](https://github.com/po-man)
 
 ---
 
